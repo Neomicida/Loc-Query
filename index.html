@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveX - Sistema Integrado de Locação</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
+
+    <!-- ========================================================= -->
+    <!--             TOPO CENTRAL DE CONTROLE DE ACESSO            -->
+    <!-- ========================================================= -->
+    <header class="bg-blue-950 text-white px-6 py-3 flex justify-between items-center border-b border-blue-900 shadow-sm z-40 relative">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl font-black tracking-wider text-blue-400">DriveX</span>
+            <span class="text-xs bg-blue-800 px-2 py-0.5 rounded font-mono text-gray-300">v2.2</span>
+        </div>
+        <div class="flex bg-blue-900 rounded-lg p-1 space-x-1">
+            <button onclick="mudarAmbiente('cliente')" id="btn-env-cliente" class="px-4 py-1.5 rounded-md text-sm font-bold transition bg-blue-600 text-white">
+                Portal do Cliente
+            </button>
+            <button onclick="mudarAmbiente('admin')" id="btn-env-admin" class="px-4 py-1.5 rounded-md text-sm font-bold transition text-gray-400 hover:text-white">
+                Painel Administrativo
+            </button>
+        </div>
+    </header>
+
+    <div class="flex min-h-[calc(100vh-60px)]">
+
+        <!-- MENU LATERAL DO CLIENTE -->
+        <aside id="menu-cliente" class="w-64 bg-white border-r border-gray-200 p-4 flex flex-col justify-between">
+            <div class="space-y-1">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-3">Menu Cliente</p>
+                <button onclick="mostrarTela('c-disponiveis')" class="aba-c w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold bg-blue-50 text-blue-700">🚗 Veículos Disponíveis</button>
+                <button onclick="mostrarTela('c-alugar')" class="aba-c w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">🔑 Alugar Veículo</button>
+                <button onclick="mostrarTela('c-pagamento')" class="aba-c w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">💳 Métodos de Pagamento</button>
+                <button onclick="mostrarTela('c-pedidos')" class="aba-c w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">📋 Meus Pedidos</button>
+            </div>
+            <div class="border-t border-gray-100 pt-4">
+                <button onclick="mostrarTela('c-cadastro')" class="aba-c w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">👤 Meu Cadastro</button>
+            </div>
+        </aside>
+
+        <!-- MENU LATERAL DO ADMIN -->
+        <aside id="menu-admin" class="w-64 bg-slate-900 text-slate-300 p-4 hidden flex-col justify-between">
+            <div class="space-y-1">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Menu Admin</p>
+                <button onclick="mostrarTela('a-estoque')" class="aba-a w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800">📦 Estoque de Carros</button>
+                <button onclick="mostrarTela('a-alugar')" class="aba-a w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800">🔑 Nova Locação (Balcão)</button>
+                <button onclick="mostrarTela('a-pedidos')" class="aba-a w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800">📋 Gerenciar Pedidos</button>
+                <button onclick="mostrarTela('a-clientes')" class="aba-a w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800">👥 Lista de Clientes</button>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO DAS TELAS -->
+        <main class="flex-1 p-8">
+
+            <!-- TELAS DO CLIENTE -->
+            <div id="ambiente-cliente" class="space-y-6">
+                <!-- 1. Veículos Disponíveis (Tela Inicial do Cliente) -->
+                <section id="tela-c-disponiveis" class="tela-conteudo block">
+                    <h2 class="text-2xl font-bold mb-1">Veículos Disponíveis</h2>
+                    <p class="text-sm text-gray-500 mb-6">Explore nossa frota pronta para rodar.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="h-40 bg-gray-200 flex items-center justify-center text-gray-400 text-xs">Foto do Corolla</div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg">Toyota Corolla</h3>
+                                <p class="text-xs text-gray-500 mb-3">Sedan Premium | Automático</p>
+                                <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+                                    <span class="font-bold text-blue-600">R$ 180/dia</span>
+                                    <button onclick="mostrarTela('c-alugar')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-blue-700 transition">Alugar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Alugar -->
+                <section id="tela-c-alugar" class="tela-conteudo hidden max-w-xl bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">Solicitar Nova Locação</h2>
+                    <form class="space-y-4" onsubmit="event.preventDefault(); alert('Locação enviada para análise da CNH.');">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Selecione o Carro</label>
+                            <select class="w-full border border-gray-300 rounded-md p-2 text-sm"><option>Toyota Corolla (R$ 180/dia)</option></select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Data Retirada</label>
+                                <input type="date" class="w-full border border-gray-300 rounded-md p-2 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Data Devolução</label>
+                                <input type="date" class="w-full border border-gray-300 rounded-md p-2 text-sm">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md font-bold text-sm hover:bg-blue-700 transition">Avançar para Validação CNH (Idwall)</button>
+                    </form>
+                </section>
+
+                <!-- 3. Pagamento -->
+                <section id="tela-c-pagamento" class="tela-conteudo hidden max-w-xl bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-xl font-bold mb-2">Carteira de Pagamentos (Stripe)</h2>
+                    <p class="text-xs text-gray-500 mb-4">Gerencie seus cartões salvos com segurança.</p>
+                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">💳</span>
+                            <div>
+                                <p class="text-sm font-bold">Visa final 4242</p>
+                                <p class="text-xs text-gray-400">Expira em 12/29</p>
+                            </div>
+                        </div>
+                        <span class="text-xs bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded">Padrão</span>
+                    </div>
+                    <button class="w-full border border-dashed border-gray-300 hover:border-blue-500 text-gray-600 hover:text-blue-600 py-2.5 rounded-lg text-sm font-medium transition">+ Adicionar Novo Cartão</button>
+                </section>
+
+                <!-- 4. Pedidos -->
+                <section id="tela-c-pedidos" class="tela-conteudo hidden">
+                    <h2 class="text-xl font-bold mb-4">Histórico de Pedidos / Locações</h2>
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase border-b border-gray-200">
+                                <tr>
+                                    <th class="p-4">Cód Pedido</th>
+                                    <th class="p-4">Carro</th>
+                                    <th class="p-4">Período</th>
+                                    <th class="p-4">Total</th>
+                                    <th class="p-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-4 font-mono text-xs font-bold text-gray-600">#LOC-9821</td>
+                                    <td class="p-4 font-medium">Toyota Corolla</td>
+                                    <td class="p-4 text-xs text-gray-500">20/06/2026 até 25/06/2026</td>
+                                    <td class="p-4 font-semibold text-gray-900">R$ 900,00</td>
+                                    <td class="p-4"><span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">Análise de CNH</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 5. Meu Cadastro (Com abas para Cadastro / Login interno) -->
+                <section id="tela-c-cadastro" class="tela-conteudo hidden max-w-md mx-auto bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
+                    <div class="text-center">
+                        <h2 class="text-xl font-bold text-gray-900">Acesso ao Perfil</h2>
+                        <p class="text-gray-500 text-xs mt-1" id="auth-subtitulo">Gerencie suas informações e documentos</p>
+                    </div>
+
+                    <!-- Abas internas para alternar entre Cadastro e Login -->
+                    <div class="flex bg-gray-100 rounded-lg p-1 text-xs font-medium">
+                        <button onclick="alternarAbasAuth('cadastro')" id="btn-auth-cadastro" class="flex-1 py-2 rounded-md bg-white text-gray-900 shadow text-center font-bold">Criar Conta</button>
+                        <button onclick="alternarAbasAuth('login')" id="btn-auth-login" class="flex-1 py-2 rounded-md text-gray-500 text-center hover:text-gray-900">Já tenho Conta</button>
+                    </div>
+
+                    <!-- Formulário de Cadastro -->
+                    <form id="form-auth-cadastro" onsubmit="event.preventDefault(); alert('Cadastro realizado com sucesso!');" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="col-span-2">
+                                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Nome Completo</label>
+                                <input type="text" required class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">CPF</label>
+                                <input type="text" placeholder="000.000.000-00" required class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Nº da CNH</label>
+                                <input type="text" required class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">E-mail</label>
+                                <input type="email" required class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Senha</label>
+                                <input type="password" required class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-md transition shadow text-sm">Finalizar Cadastro</button>
+                    </form>
+
+                    <!-- Formulário de Login -->
+                    <form id="form-auth-login" onsubmit="event.preventDefault(); alert('Login efetuado!');" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">E-mail</label>
+                            <input type="email" required class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Senha</label>
+                            <input type="password" required class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-md transition shadow text-sm">Entrar</button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- TELAS DO ADMINISTRADOR -->
+            <div id="ambiente-admin" class="space-y-6 hidden">
+                <!-- 1. Estoque de Carros -->
+                <section id="tela-a-estoque" class="tela-conteudo block">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Estoque de Veículos</h2>
+                            <p class="text-sm text-gray-500">Gerencie a frota física integrada ao Django.</p>
+                        </div>
+                        <button onclick="alert('Funcionalidade de inserção rápida')" class="bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 transition">+ Adicionar Carro</button>
+                    </div>
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase border-b border-gray-200">
+                                <tr>
+                                    <th class="p-4">ID</th>
+                                    <th class="p-4">Modelo/Marca</th>
+                                    <th class="p-4">Placa</th>
+                                    <th class="p-4">Preço Diária</th>
+                                    <th class="p-4">Status Frota</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-4 font-mono text-gray-500">1</td>
+                                    <td class="p-4 font-medium">Toyota Corolla</td>
+                                    <td class="p-4 font-mono text-xs">RIO-4F22</td>
+                                    <td class="p-4">R$ 180,00</td>
+                                    <td class="p-4"><span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-medium">Disponível</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 2. Alugar Balcão -->
+                <section id="tela-a-alugar" class="tela-conteudo hidden max-w-xl bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 class="text-xl font-bold mb-1">Locação de Balcão (Presencial)</h2>
+                    <p class="text-xs text-gray-500 mb-4">Realizar locação diretamente pelo painel administrativo.</p>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Selecione o Cliente Cadastrado</label>
+                            <select class="w-full border border-gray-300 rounded-md p-2 text-sm"><option>Saulo Sousa (CPF: 000...)</option></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Selecione o Carro Livre</label>
+                            <select class="w-full border border-gray-300 rounded-md p-2 text-sm"><option>Toyota Corolla (Placa: RIO-4F22)</option></select>
+                        </div>
+                        <button type="submit" class="w-full bg-slate-900 text-white py-2 rounded-md font-bold text-sm hover:bg-black transition">Aprovar e Liberar Chaves</button>
+                    </form>
+                </section>
+
+                <!-- 3. Gerenciar Pedidos -->
+                <section id="tela-a-pedidos" class="tela-conteudo hidden">
+                    <h2 class="text-xl font-bold mb-4">Gerenciamento Geral de Pedidos</h2>
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase border-b border-gray-200">
+                                <tr>
+                                    <th class="p-4">Pedido</th>
+                                    <th class="p-4">Cliente</th>
+                                    <th class="p-4">Carro</th>
+                                    <th class="p-4">Pagamento</th>
+                                    <th class="p-4">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-4 font-mono font-bold">#LOC-9821</td>
+                                    <td class="p-4">Saulo Sousa</td>
+                                    <td class="p-4">Toyota Corolla</td>
+                                    <td class="p-4 text-emerald-600 font-medium">Capturado (Stripe)</td>
+                                    <td class="p-4 flex space-x-2">
+                                        <button onclick="alert('Simulando aprovação de CNH')" class="bg-blue-600 text-white text-xs px-2 py-1 rounded hover:bg-blue-700 font-medium">Validar CNH</button>
+                                        <button class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-200 font-medium">Recusar</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 4. Clientes -->
+                <section id="tela-a-clientes" class="tela-conteudo hidden">
+                    <h2 class="text-xl font-bold mb-4">Base de Clientes Cadastrados</h2>
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase border-b border-gray-200">
+                                <tr>
+                                    <th class="p-4">ID</th>
+                                    <th class="p-4">Nome</th>
+                                    <th class="p-4">CPF / Documento</th>
+                                    <th class="p-4">Status Idwall</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-4 font-mono text-gray-500">102</td>
+                                    <td class="p-4 font-medium">Saulo Sousa</td>
+                                    <td class="p-4">000.000.000-00</td>
+                                    <td class="p-4"><span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-medium">Validado</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- LOGICA DE COMPORTAMENTO JAVASCRIPT -->
+    <script>
+        // Alterna entre os subformulários do módulo de cadastro interno
+        function alternarAbasAuth(tipo) {
+            const formCadastro = document.getElementById('form-auth-cadastro');
+            const formLogin = document.getElementById('form-auth-login');
+            const btnCadastro = document.getElementById('btn-auth-cadastro');
+            const btnLogin = document.getElementById('btn-auth-login');
+            const subtitulo = document.getElementById('auth-subtitulo');
+
+            if(tipo === 'login') {
+                formCadastro.classList.add('hidden');
+                formLogin.classList.remove('hidden');
+                btnLogin.className = "flex-1 py-2 rounded-md bg-white text-gray-900 shadow text-center font-bold";
+                btnCadastro.className = "flex-1 py-2 rounded-md text-gray-500 text-center hover:text-gray-900";
+                subtitulo.innerText = "Insira suas credenciais de acesso";
+            } else {
+                formLogin.classList.add('hidden');
+                formCadastro.classList.remove('hidden');
+                btnCadastro.className = "flex-1 py-2 rounded-md bg-white text-gray-900 shadow text-center font-bold";
+                btnLogin.className = "flex-1 py-2 rounded-md text-gray-500 text-center hover:text-gray-900";
+                subtitulo.innerText = "Crie sua conta para gerenciar dados";
+            }
+        }
+
+        // Transiciona entre o ambiente de Cliente e o ambiente Admin
+        function mudarAmbiente(ambiente) {
+            const menuCliente = document.getElementById('menu-cliente');
+            const menuAdmin = document.getElementById('menu-admin');
+            const ambCliente = document.getElementById('ambiente-cliente');
+            const ambAdmin = document.getElementById('ambiente-admin');
+            
+            const btnCliente = document.getElementById('btn-env-cliente');
+            const btnAdmin = document.getElementById('btn-env-admin');
+
+            if (ambiente === 'admin') {
+                menuCliente.classList.replace('flex', 'hidden');
+                menuAdmin.classList.replace('hidden', 'flex');
+                ambCliente.classList.add('hidden');
+                ambAdmin.classList.remove('hidden');
+                
+                btnAdmin.className = "px-4 py-1.5 rounded-md text-sm font-bold transition bg-blue-600 text-white shadow";
+                btnCliente.className = "px-4 py-1.5 rounded-md text-sm font-bold transition text-gray-400 hover:text-white";
+                
+                mostrarTela('a-estoque');
+            } else {
+                menuAdmin.classList.replace('flex', 'hidden');
+                menuCliente.classList.replace('hidden', 'flex');
+                ambAdmin.classList.add('hidden');
+                ambCliente.classList.remove('hidden');
+                
+                btnCliente.className = "px-4 py-1.5 rounded-md text-sm font-bold transition bg-blue-600 text-white shadow";
+                btnAdmin.className = "px-4 py-1.5 rounded-md text-sm font-bold transition text-gray-400 hover:text-white";
+                
+                mostrarTela('c-disponiveis');
+            }
+        }
+
+        // Controla a exibição das telas internas de cada ambiente
+        function mostrarTela(telaId) {
+            const telas = document.querySelectorAll('.tela-conteudo');
+            telas.forEach(tela => tela.classList.replace('block', 'hidden'));
+
+            const telaAlvo = document.getElementById(`tela-${telaId}`);
+            if (telaAlvo) {
+                telaAlvo.classList.replace('hidden', 'block');
+            }
+
+            const prefixo = telaId.startsWith('c-') ? '.aba-c' : '.aba-a';
+            const botoes = document.querySelectorAll(prefixo);
+            
+            botoes.forEach(btn => {
+                if (prefixo === '.aba-c') {
+                    btn.className = "aba-c w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900";
+                } else {
+                    btn.className = "aba-a w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800";
+                }
+            });
+
+            const botaoClicado = event.currentTarget;
+            if (botaoClicado && botaoClicado.tagName === 'BUTTON') {
+                if (prefixo === '.aba-c') {
+                    botaoClicado.className = "aba-c w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold bg-blue-50 text-blue-700";
+                } else {
+                    botaoClicado.className = "aba-a w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold bg-slate-800 text-white";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
